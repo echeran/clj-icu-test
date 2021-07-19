@@ -7,7 +7,7 @@
             [clojure.java.io :as io]
             [kalai.types :as types]
             [kalai.util :as u])
-  (:import (clojure.lang IMeta)
+  (:import (clojure.lang IMeta Keyword)
            (java.util Map Set Vector)))
 
 (declare stringify)
@@ -282,21 +282,24 @@
     "Null"
     (if (instance? IMeta x)
       (let [{:keys [t]} (meta x)]
-        (case t
-          :map "PMap"
-          :mmap "MMap"
-          :set "PSet"
-          :mset "MSet"
-          :vector "PVector"
-          :mvector "MVector"
-          :bool "Bool"
-          :byte "Byte"
-          :int "Int"
-          :long "Long"
-          :float "Float"
-          :double "Double"
-          :string "String"
-          nil))
+        (if (map? t)
+          (case (-> t keys first)
+            :map "PMap"
+            :mmap "MMap"
+            :set "PSet"
+            :mset "MSet"
+            :vector "PVector"
+            :mvector "MVector"
+            nil)
+          (case t
+            :bool "Bool"
+            :byte "Byte"
+            :int "Int"
+            :long "Long"
+            :float "Float"
+            :double "Double"
+            :string "String"
+            nil)))
       (condp instance? x
         Byte "Byte"
         Boolean "Bool"
@@ -304,6 +307,7 @@
         Double "Double"
         Integer "Int"
         Long "Long"
+        Keyword "String"
         String "String"
         Map "MMap"
         Set "MSet"

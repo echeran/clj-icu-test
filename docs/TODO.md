@@ -2,6 +2,13 @@
 
 * In Java, nth index can only be an int, we should do that on behalf of the user and document that constraint.
 * SQL builder application
+  - Fix stringification of WHERE clause and fix the "op" interpolation in the WHERE clause of example f1
+  - Rust sql_builder output can have a binary to run transpiled output
+  - Rename kalai::Value enum to kalai::Any enum ?
+  - Create "kalai::Value::MISSING_TYPE(..." output or throw an error when using `(r/value ...)` on an argument whose type is not recognized for kalai::Value instead of returning nil
+  - Note: the absence of a type isn't the same as a `{:t :any}`
+  - Note: the type of the inner value on the binding symbol for a nested collection didn't propagate to the binding initial value data literal's inner/nested data coll literals
+  - Note: type `:any` is not specific enough to construct a collection with currently (ex: in an init aka let-binding) because the initial value can either represent a persistent vector or mutable vector, and the user must specify which one the literal represents
   - Heterogeneous collections
     * Copy over any Java tests for heterogeneous colls to Rust and make work
     * Handle ":any" type in Rust

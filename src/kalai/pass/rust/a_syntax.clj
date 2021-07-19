@@ -12,9 +12,9 @@
     ;;;; vector []
     (m/and [!x ...]
            ?expr
-           (m/app meta ?meta)
-           (m/let [?t (:t ?meta)
-                   {_ [?value-t]} ?t
+           (m/app (comp :t meta) ?t)
+           (m/let [(m/or {_ [?value-t]}
+                         (m/let [?value-t :any])) ?t
                    ?tmp (u/tmp ?t ?expr)]))
     ;;->
     (m/app
@@ -28,9 +28,10 @@
     (m/and {}
            ?expr
            (m/app u/sort-any-type ([!k !v] ...))
-           (m/app meta ?meta)
-           (m/let [?t (:t ?meta)
-                   {_ [?key-t ?value-t]} ?t
+           (m/app (comp :t meta) ?t)
+           (m/let [(m/or {_ [?key-t ?value-t]}
+                         (m/let [?key-t :any
+                                 ?value-t :any])) ?t
                    ?tmp (u/tmp ?t ?expr)]))
     ;;->
     (m/app
@@ -46,9 +47,9 @@
     (m/and #{}
            ?expr
            (m/app u/sort-any-type (!k ...))
-           (m/app meta ?meta)
-           (m/let [?t (:t ?meta)
-                   {_ [?key-t]} ?t
+           (m/app (comp :t meta) ?t)
+           (m/let [(m/or {_ [?key-t]}
+                         (m/let [?key-t :any])) ?t
                    ?tmp (u/tmp ?t ?expr)]))
     ;;->
     (m/app
